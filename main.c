@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_NUMEROS 25
+#define MAX_NUMEROS 30
 
 int main() {
     // Abertura do arquivo de entrada
