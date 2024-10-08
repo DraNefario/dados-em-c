@@ -11,6 +11,7 @@ int main() {
         return 1;
     }
 
+// é lida a quantidade de números que serão analisados
     int n;
     fscanf(input, "%d", &n); 
     if (n > MAX_NUMEROS || n < 3) {
@@ -19,6 +20,7 @@ int main() {
         return 1;
     }
 
+    // os numeros da file dados são adicionados ao array numeros
     int tamanho_numeros = 0;
     int numeros[MAX_NUMEROS];
     for (int i = 0; i < n; i++) {
@@ -77,26 +79,32 @@ int main() {
     
     fclose(estatisticas); // Fechando o arquivo de saída
 
+
+    
+    // é criada a file de distintos e conferido se realmente foi criada
     FILE *distintos = fopen("distintos.txt", "w");
     if (!distintos) {
         printf("Erro ao criar o arquivo distintos.txt\n");
         return 1;
     }
 
+    // é inserida na file distintos os elementos presentes no array diferentes
     fprintf(distintos, "Numeros distintos entre si: ");
     for (int i = 0; i < tamanho_diferentes; i++) {
     fprintf(distintos, "%d ", diferentes[i]); // Imprime cada elemento do array
     }
     fprintf(distintos, "\n"); // Nova linha após imprimir todos os números
+    fclose(distintos);
 
 
+    // é criada a file de todos os numeros de entrada em forma não decrescente e conferido se realmente foi criada
     FILE *ordenado = fopen("ordenado.txt", "w");
     if (!ordenado) {
         printf("Erro ao criar o arquivo ordenado.txt\n");
         return 1;
     }
 
-    
+    // Elementos do array numeros são colocados em ordem não decrescentes e escritos na file
     for (int i = 0; i < tamanho_numeros; i++){
         for (int j = 0; j < tamanho_numeros - i - 1; j++){
 
@@ -119,13 +127,14 @@ int main() {
     fclose(ordenado); // Fechando o arquivo
 
 
-//  Criando o arquivo de distintos ordenados
+// é criada a file dos numeros distintos em forma não decrescente e conferido se realmente foi criada
     FILE *distintos_ordenado = fopen("distintos_ordenado.txt", "w");
     if (!distintos_ordenado) {
         printf("Erro ao criar o arquivo distintos_ordenado.txt\n");
         return 1;
     }
 
+    // Elementos do array diferentes são colocados em ordem não decrescentes e escritos na file
     for (int i = 0; i < tamanho_diferentes; i++){
         for (int j = 0; j < tamanho_diferentes - i - 1; j++){
 
