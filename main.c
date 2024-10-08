@@ -1,36 +1,16 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
-  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
-  Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 
 #define MAX_NUMEROS 25
 
-int comparacao (const void *a, const void *b) {
-    return (*(int *)a - *(int *)b);
-}
-
-int diferente(int *arr, int size, int num) {
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == num) {
-            return 0; 
-        }
-    }
-    return 1; 
-}
-
 int main() {
+    // Abertura do arquivo de entrada
     FILE *input = fopen("dados.txt", "r");
     if (!input) {
         printf("Erro ao abrir o arquivo dados.txt\n");
         return 1;
     }
-    
+
     int n;
     fscanf(input, "%d", &n); 
     if (n > MAX_NUMEROS || n < 3) {
@@ -38,68 +18,105 @@ int main() {
         fclose(input);
         return 1;
     }
-    
+
+    int tamanho_numeros = 0;
     int numeros[MAX_NUMEROS];
     for (int i = 0; i < n; i++) {
         fscanf(input, "%d", &numeros[i]);
+        tamanho_numeros++;
     }
-    fclose(input);
-    
+    fclose(input); // Fechando o arquivo após a leitura
+
+    // Variáveis para armazenar as estatísticas
     int positivos = 0, negativos = 0, zeros = 0;
     int pares = 0, impares = 0;
     int diferentes[MAX_NUMEROS];
     int tamanho_diferentes = 0;
     
-     for (int i = 0; i < n; i++) {
-        if (numeros[i] > 0) {
-            positivos++;
-        } else if (numeros[i] < 0) {
-            negativos++;
-        } else {
-            zeros++;
-        }
 
-        if (numeros[i] % 2 == 0) {
-            pares++;
-        } else {
-            impares++;
-        }
-
+    // Loop para contagem de características e verificação de números únicos
+    for (int i = 0; i < n; i++) {
+        int num = numeros[i];
         
-        if (diferente(diferentes, tamanho_diferentes, numeros[i])) {
-            diferentes[tamanho_diferentes++] = numeros[i];
+        // Contagem de positivos, negativos e zeros
+        if (num > 0) positivos++;
+        else if (num < 0) negativos++;
+        else zeros++;
+
+        // Contagem de pares e ímpares
+        if (num % 2 == 0) pares++;
+        else impares++;
+
+        // Verificar se o número já foi contado como diferente
+        int novo = 1;
+        for (int j = 0; j < tamanho_diferentes; j++) {
+            if (diferentes[j] == num) {
+                novo = 0; // Já existe
+                break;
+            }
+        }
+        if (novo) {
+            diferentes[tamanho_diferentes++] = num; // Adiciona se for novo
         }
     }
-    
+
+    // Abertura do arquivo de saída
     FILE *estatisticas = fopen("estatisticas.txt", "w");
     if (!estatisticas) {
         printf("Erro ao criar o arquivo estatisticas.txt\n");
         return 1;
     }
+
+    // Escrita das estatísticas no arquivo
     fprintf(estatisticas, "Quantidade de numeros positivos: %d\n", positivos);
     fprintf(estatisticas, "Quantidade de numeros negativos: %d\n", negativos);
     fprintf(estatisticas, "Quantidade de numeros zero: %d\n", zeros);
     fprintf(estatisticas, "Quantidade de numeros pares: %d\n", pares);
     fprintf(estatisticas, "Quantidade de numeros impares: %d\n", impares);
-    fclose(estatisticas);
+    fprintf(estatisticas, "Quantidade de numeros diferentes: %d\n", tamanho_diferentes);
     
-    FILE *distintos_arquivo = fopen("distintos.txt", "w");
-    if (!distintos_arquivo) {
+    fclose(estatisticas); // Fechando o arquivo de saída
+
+    FILE *distintos = fopen("distintos.txt", "w");
+    if (!distintos) {
         printf("Erro ao criar o arquivo distintos.txt\n");
         return 1;
     }
+
+    fprintf(distintos, "Numeros distintos entre si: ");
     for (int i = 0; i < tamanho_diferentes; i++) {
-        fprintf(distintos_arquivo, "%d ", diferentes[i]);
+    fprintf(distintos, "%d ", diferentes[i]); // Imprime cada elemento do array
     }
-    fprintf(distintos_arquivo, "\n");
-    fclose(distintos_arquivo);
-    
-}
+    fprintf(distintos, "\n"); // Nova linha após imprimir todos os números
+
+
+    FILE *ordenado = fopen("ordenado.txt", "w");
+    if (!ordenado) {
+        printf("Erro ao criar o arquivo ordenado.txt\n");
+        return 1;
+    }
 
     
-    
-    
-    
-    
-    
-    
+    for (int i = 0; i < tamanho_numeros; i++){
+        for (int j = 0; j < tamanho_numeros - i - 1; j++){
+
+            // Se o elemento atual for maior que o próximo, são trocados de lugar
+            if (numeros[j] > numeros[j + 1]) {
+                // Elementos são trocados
+                int aux = numeros[j];
+                numeros[j] = numeros[j + 1];
+                numeros[j + 1] = aux;
+            }
+        }
+    }
+
+    fprintf(ordenado, "Numeros ordenados entre si: ");
+    for (int i = 0; i < tamanho_numeros; i++) {
+        fprintf(ordenado, "%d ", numeros[i]);
+    }
+    fprintf(ordenado, "\n"); // Nova linha é criada
+
+    fclose(ordenado); // Fechando o arquivo
+
+    return 0;
+}
