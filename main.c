@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_NUMEROS 30
+#define MAX_NUMEROS 100
 
 int main() {
     // Abertura do arquivo de entrada
@@ -14,7 +14,7 @@ int main() {
 // é lida a quantidade de números que serão analisados
     int n;
     fscanf(input, "%d", &n); 
-    if (n > MAX_NUMEROS || n < 3) {
+    if (n > MAX_NUMEROS || n < 30) {
         printf("Erro: Quantidade de números fora do limite permitido\n");
         fclose(input);
         return 1;
@@ -22,10 +22,17 @@ int main() {
 
     // os numeros da file dados são adicionados ao array numeros
     int tamanho_numeros = 0;
-    int numeros[MAX_NUMEROS];
+    int numeros[n];
     for (int i = 0; i < n; i++) {
         fscanf(input, "%d", &numeros[i]);
         tamanho_numeros++;
+    }
+    
+        int extra_num;
+    if (fscanf(input, "%d", &extra_num) != EOF) {
+        printf("Erro: O arquivo contém mais números do que o esperado\n");
+        fclose(input);
+        return 1;
     }
     fclose(input); // Fechando o arquivo após a leitura
 
