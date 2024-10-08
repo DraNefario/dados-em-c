@@ -118,5 +118,34 @@ int main() {
 
     fclose(ordenado); // Fechando o arquivo
 
+
+//  Criando o arquivo de distintos ordenados
+    FILE *distintos_ordenado = fopen("distintos_ordenado.txt", "w");
+    if (!distintos_ordenado) {
+        printf("Erro ao criar o arquivo distintos_ordenado.txt\n");
+        return 1;
+    }
+
+    for (int i = 0; i < tamanho_diferentes; i++){
+        for (int j = 0; j < tamanho_diferentes - i - 1; j++){
+
+            // Se o elemento atual for maior que o próximo, são trocados de lugar
+            if (diferentes[j] > diferentes[j + 1]) {
+                // Elementos são trocados
+                int aux = diferentes[j];
+                diferentes[j] = diferentes[j + 1];
+                diferentes[j + 1] = aux;
+            }
+        }
+    }
+
+    fprintf(distintos_ordenado, "Numeros distintos ordenados entre si: ");
+    for (int i = 0; i < tamanho_diferentes; i++) {
+        fprintf(distintos_ordenado, "%d ", diferentes[i]);
+    }
+    fprintf(distintos_ordenado, "\n"); // Nova linha é criada
+
+    fclose(distintos_ordenado); // Fechando o arquivo
+
     return 0;
 }
